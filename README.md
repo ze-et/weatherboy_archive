@@ -1,4 +1,4 @@
-# weatherboy_archive
+# The Weatherboy Archive
 This repo contains the code related to the project "Weatherboy", partly a passion project and partly done for an university group project.
 
 ## What's "Weatherboy" even?
