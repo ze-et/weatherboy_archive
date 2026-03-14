@@ -6,11 +6,17 @@ The project was about creating a climate measuring device that is customisable a
 
 Out of the sensors provided to us, we ended up using the DHT11 for temperature and humidity and the MQ-135 for a very rough "air quality" measure. For interactivity, a single regular joystick was used. And finally, the output was done via an Adafruit SSD1306 128x64 OLED screen. All of these parts were connected to an Arduino Uno R4, somewhat overkill but the only other Arduino that was available wouldn't have been able to handle the screen.
 
-Using the Weatherboy works like this:
+## Functionality
 - The screen shows a full "mode"; a mode contains multiple modules, each module displaying something measureable in a specific unit.
-- The mode can be changed via left and right. The default application has 7 modes, 3 of which purely display values, 3 of which are graphs showing the last 100 values measured, and the unique settings mode.
-- For the normal modes, clicking highlights one module. Left and right now switches which module is highlighted, while up and down changes the displayed unit (e.g. Fahrenheit versus Celsius). This mode can be exited by clicking again.
+- The mode can be changed via left and right. The default application has seven modes, three of which purely display values, another three are graphs showing the last 100 values measured, and one is the unique settings mode.
+- For the normal modes, clicking highlights one module. Left and right now switches which module is highlighted, while up and down changes the displayed unit (e.g. Fahrenheit, Celsius, Kelvin...). This mode can be exited by clicking again.
 - For the settings, clicking toggles settings on or off (those with a button to the left), cycles through values (those with a character to the left), or triggers something (those with nothing to the left). Up and down moves through each setting.
+  - `Dunkler Modus` inverts the screen, i.e. dark mode.
+  - `Graph Intervall` determines how often graph values are updated between every second, minute, or hour.
+  - `Graph Nullpunkt` toggles whether the graph starts at the lowest value or at zero.
+  - `Graph leeren` clears all graph values.
+  - `Modul->Text` toggles a debug view of the modules, where the properties of them are shown in text form. (tied to definition `MODULESINTEXT`)
+  - `Uebertragen` sends screen contents via serial output to whatever the Arduino is plugged into. This can then be used by the Processing program to render the screen contents. (tied to definition `SCREENTOSERIAL`)
 
 ## What is part of this repo?
 - `src`: The plain source code.
