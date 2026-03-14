@@ -3,7 +3,9 @@ This repo contains the code related to the project "Weatherboy", partly a passio
 
 ## What's "Weatherboy" even?
 The project was about creating a climate measuring device that is customisable and visually appealing. I ended up being the person responsible for the code and for UI design, although for the latter I made sure to seek second opinions from my group members.
+
 Out of the sensors provided to us, we ended up using the DHT11 for temperature and humidity and the MQ-135 for a very rough "air quality" measure. For interactivity, a single regular joystick was used. And finally, the output was done via an Adafruit SSD1306 128x64 OLED screen. All of these parts were connected to an Arduino Uno R4, somewhat overkill but the only other Arduino that was available wouldn't have been able to handle the screen.
+
 Using the Weatherboy works like this:
 - The screen shows a full "mode"; a mode contains multiple modules, each module displaying something measureable in a specific unit.
 - The mode can be changed via left and right. The default application has 7 modes, 3 of which purely display values, 3 of which are graphs showing the last 100 values measured, and the unique settings mode.
@@ -20,4 +22,5 @@ Using the Weatherboy works like this:
 
 ## External code used in this repo
 The main source code does not to my knowledge contain code I have not written myself.
+
 As the simulation project couldn't work without knowing how the libraries themselves worked, it needed some of the source code used for them to function. Namely, some functions headers in the [Adafruit GFX](https://github.com/adafruit/Adafruit-GFX-Library) and [Adafruit SSD1306](https://github.com/adafruit/Adafruit_SSD1306) libraries were copied, and the full Adafruit GFX [`gfxfont.h`](https://github.com/adafruit/Adafruit-GFX-Library/blob/master/gfxfont.h) file. The font included in [`glcdfont.c`](https://github.com/adafruit/Adafruit-GFX-Library/blob/master/glcdfont.c) was also used, albeit converted into the new Adafruit font type.
