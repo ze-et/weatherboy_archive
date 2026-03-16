@@ -6,6 +6,7 @@ A close-enough attempt at getting the program to run without an Arduino board. D
 There are two differences I can see:
 - Rounded rectangles are much rounder. This is likely a difference in the algorithm used for implementing them.
 - Text renders one pixel lower.
+- The small font text renders at a completely different spot; again, probably due to implementation detais.
 
 ### Ideas versus reality
 While I initially planned this to merely be a header file replacement, this ended up not happening; some pieces of code in the project itself got replaced, hence why an altered copy of it is included here.
