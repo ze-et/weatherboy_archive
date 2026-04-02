@@ -23,7 +23,7 @@ enum graph_interval_enum graph_interval = GRAPH_SECOND;
 
 // Sonstige
 #ifdef SCREENTOSERIAL
-bool enable_screen_to_serial = false;
+bool enable_screen_to_serial = true; // false
 #endif
 #ifdef MODULESINTEXT
 bool enable_modules_in_text = false;

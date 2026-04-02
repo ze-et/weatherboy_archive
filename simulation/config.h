@@ -1,6 +1,6 @@
 #pragma once
 
-#define MEASURING_RATE_MS 2500
+#define MEASURING_RATE_MS 250
 #define MEASURE_LIST_LENGTH 101
 
 #define SCREENTOSERIAL

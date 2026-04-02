@@ -1,5 +1,6 @@
 #pragma once
 
+#include "serial.h"
 #include "Adafruit_SSD1306.h"
 #include "customtypes.h"
 #include "config.h"
@@ -52,4 +53,5 @@ extern enum graph_interval_enum graph_interval;
 // Objekte ----------------------------------------------------------------------------------------
 extern Adafruit_SSD1306 display;
 extern module_set mode_list[mode_count];
+extern Serial serial;
 // ------------------------------------------------------------------------------------------------

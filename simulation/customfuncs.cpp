@@ -90,7 +90,7 @@ void final_output()
 #ifdef SCREENTOSERIAL
 // Gibt den Inhalt des Bildschirms aus in Bytes; mithilfe eines Processing-Programs umzuwandeln zu erkennbaren Bildschirminhalt
   void print_screen_to_serial()
-  {/*
+  {
     if(enable_screen_to_serial)
       {
       unsigned char invert_values = is_display_inverted * 0xFF;
@@ -98,7 +98,7 @@ void final_output()
       {
         for(unsigned char j = 0; j < 128; j += 8)
         {
-          Serial.write(invert_values ^
+          serial.write(invert_values ^
                       (display.getPixel(j+7, i)
                       |(display.getPixel(j+6, i) << 1)
                       |(display.getPixel(j+5, i) << 2)
@@ -107,12 +107,9 @@ void final_output()
                       |(display.getPixel(j+2, i) << 5)
                       |(display.getPixel(j+1, i) << 6)
                       |(display.getPixel(j,   i) << 7)));
-          //Serial.print(" ");
         }
       }
-      //Serial.println();
-      Serial.write(0b10101010);
-    }*/
+    }
   }
 #endif
 
@@ -126,7 +123,7 @@ settings settings_list[setting_count] = {
   settings("Modul->Text",toggle_module_in_text),
   #endif
   #ifdef SCREENTOSERIAL
-  settings("Uebertragen",toggle_screen_to_serial),
+  settings("Uebertragen",toggle_screen_to_serial, true),
   #endif
 };
 

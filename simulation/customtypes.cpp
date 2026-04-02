@@ -196,10 +196,27 @@ void info_module::render_graph() const
       display.print('?');
   }
   delta = highest_measured_value - lowest_measured_value;
-  for(int i = MEASURE_LIST_LENGTH - 2; i > MEASURE_LIST_LENGTH - measure_list_measured_count; i -= 1)
+  /// NOTE: Bug fix for something that doesn't happen on real Arduino boards:
+  ///       If delta = 0, then a division by zero occurs.
+  ///       Since no lines are drawn anyway then, a return works identically.
+  /// NOTE: Fix für etwas, was nicht auf echten Arduino Bretter passieren:
+  ///       Wenn delta = 0 ist, dann finden ein Teiler-Durch-Null Fehler statt.
+  ///       Ein return funktioniert gleich wie der tatsächliche Programmablauf.
+  if(delta == 0)
   {
-    display.drawLine(i+25,(-(list_reference[(i+1 + measure_list_i_offset) % MEASURE_LIST_LENGTH] - lowest_measured_value) * 52)/ delta + 57,\
-                     i+24,(-(list_reference[( i  + measure_list_i_offset) % MEASURE_LIST_LENGTH] - lowest_measured_value) * 52)/ delta + 57, BLACK);
+    return;
+  }
+  /// NOTE: Changed for readability
+  /// NOTE: Geändert für Lesbarkeit
+  for(int i = MEASURE_LIST_LENGTH - 2;
+      i > MEASURE_LIST_LENGTH - measure_list_measured_count;
+      i -= 1)
+  {
+    unsigned char adj_idx = i + measure_list_i_offset;
+    unsigned short line_start_value = list_reference[(adj_idx + 1) % MEASURE_LIST_LENGTH];
+    unsigned short line_end_value   = list_reference[adj_idx       % MEASURE_LIST_LENGTH];
+    display.drawLine(i+25,(-(line_start_value - lowest_measured_value) * 52)/ delta + 57,\
+                     i+24,(-(line_end_value   - lowest_measured_value) * 52)/ delta + 57, BLACK);
   }
 }
 

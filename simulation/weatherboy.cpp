@@ -11,7 +11,7 @@
 #define DHTTYPE DHT11
 
 DHT dht(DHTPIN, DHTTYPE);
-ezButton button(JOYPINSW); 
+ezButton button(JOYPINSW);
 
 // Zeit, bis die Gaswerte angezeigt werden
 uint gas_preparation_delay = 0;
@@ -28,6 +28,8 @@ struct joyStruct previousJoyState;
 // Momentane Joystickwerte so gefiltert, dass nur neue Eingaben teil davon sind.
 // D.h. wenn der Knopf gedrückt gehalten wird, wird der Druck nur registiert im ersten Moment.
 struct joyStruct filteredJoyState;
+// Serial für Ein- und Ausgabe über Processing
+Serial serial;
 
 void display_update();
 // Am Anfang waren diese Funktionen mit "inline" attributiert
@@ -52,6 +54,7 @@ unsigned long millis()
 
 void setup()
 {
+  serial.begin(19200);
   dht.begin();
   button.setDebounceTime(25);
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
@@ -66,8 +69,6 @@ void setup()
 
 void loop()
 {
-  // IF Über read_joy_values verschoben; kann sein, dass dies ein Fehler ist
-  // Momentane Werte im Intervall von MEASURING_RATE_MS aktualisieren
   if(millis() - last_auto_measure_time >= MEASURING_RATE_MS)
   {
     measure_values();
@@ -122,43 +123,12 @@ void respond_to_inputs()
 
 int analogRead(int)
 {
-  //static int joypinvalue = 1024;
-  //joypinvalue = (joypinvalue % 1536) + 512;
-  //return joypinvalue;
   return 512;
 }
 void read_joy_values()
 {
-  button.loop();
-  joyState.pressed = !button.getState();
+  joyState = serial.get_input();
 
-  joy_temp_value = analogRead(JOYPINX);
-  // Todeszone zwischen 196/672 und 352/828 inklusiv
-  // -> Wert ändert sich nicht in Todeszone, um
-  //    wiederholte Eingaben durch Messungenauigkeiten zu verhindern
-  if(joy_temp_value > 828)
-    {joyState.left = 1;}
-  else if (joy_temp_value < 672)
-    {joyState.left = 0;}
-  if(joy_temp_value < 196)
-    {joyState.right = 1;}
-  else if (joy_temp_value > 352)
-    {joyState.right = 0;}
-  
-  joy_temp_value = analogRead(JOYPINY);
-  if(joy_temp_value > 828)
-    {joyState.up = 1;}
-  else if (joy_temp_value < 672)
-    {joyState.up = 0;}
-  if(joy_temp_value < 196)
-    {joyState.down = 1;}
-  else if (joy_temp_value > 352)
-    {joyState.down = 0;}
-
-  /* Neuer Wert UND negiert (Alter Wert)
-  * -> Nur, wenn der neue Wert wahr ist und der alte Wert falsch ist der Finalwert wahr
-  * --> Wenn gerade erst der Knopf gedrückt wurde bzw. der Joystick ausgelenkt wurde
-  */
   filteredJoyState = joyState && (!previousJoyState);
 
   previousJoyState = joyState;
@@ -170,7 +140,7 @@ void measure_values()
   humidity    = dht.readHumidity();
   if(gas_preparation_delay >= 3 * 60 * 4) // 3 Minuten
   {
-    gas = 0;//analogRead(GASPIN);
+    gas = analogRead(GASPIN);
   }
   else
   {
@@ -181,7 +151,7 @@ void measure_graph_values()
 {
   temperature_list[measure_list_i_offset] = dht.readTemperature();
   humidity_list[measure_list_i_offset]    = dht.readHumidity();
-  gas_list[measure_list_i_offset] = 0;//analogRead(GASPIN);
+  gas_list[measure_list_i_offset] = analogRead(GASPIN);
   measure_list_i_offset = (measure_list_i_offset + 1) % MEASURE_LIST_LENGTH;
   if(measure_list_measured_count < MEASURE_LIST_LENGTH)
   {
