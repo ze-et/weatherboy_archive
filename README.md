@@ -30,3 +30,6 @@ Out of the sensors provided to us, we ended up using the DHT11 for temperature a
 The main source code does not to my knowledge contain code I have not written myself.
 
 As the simulation project couldn't work without knowing how the libraries themselves worked, it needed some of the source code used for them to function. Namely, some functions headers in the [Adafruit GFX](https://github.com/adafruit/Adafruit-GFX-Library) and [Adafruit SSD1306](https://github.com/adafruit/Adafruit_SSD1306) libraries were copied, and the full Adafruit GFX [`gfxfont.h`](https://github.com/adafruit/Adafruit-GFX-Library/blob/master/gfxfont.h) file. The font included in [`glcdfont.c`](https://github.com/adafruit/Adafruit-GFX-Library/blob/master/glcdfont.c) was also used, albeit converted into the new Adafruit font type.
+
+## Other
+This repo is not associated with isarithm LLC, the trademark owner of "Weatherboy". The name was based on the Gameboy, which the finished Arduino device took design cues from.
