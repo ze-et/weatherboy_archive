@@ -23,7 +23,7 @@ Out of the sensors provided to us, we ended up using the DHT11 for temperature a
 - `bitmap_resources`: The original files with which bitmaps were created for use in the project.
 - `processing`: A Processing program that recreates the contents of the screen inside a window. This was used for presentation purposes and for taking screenshots. Later on, screenshot functionality was implemented inside the program itself.
 - `simulation`: An attempt of recreating the workings of the libraries used in the code just well enough for the project to run with good old `gcc`. Reason for doing this is to get more screenshots for this repo as I no longer have access to the Arduino kit. More info is provided in the Readme for that folder.
-- `screenshots`: A collection of screenshots. They are separated into those gotten from the actual hardware (just two, unfortunately) and those gotten from the aforementioned simulation (which includes a picture of every single mode). You can see the slight inaccuracies between the two in `actual_hardware/dark_mode_off.png` and `simulation/7-settings.png`.
+- `screenshots`: A collection of screenshots. They are separated into those gotten from the actual hardware (just three, unfortunately) and those gotten from the aforementioned simulation (which includes at least one picture of every single mode, numbered in order). You can see the slight inaccuracies between the two in `actual_hardware/dark_mode_off.png` and `simulation/7-settings.png`, as well as `actual_hardware/gas_graph_warmup_exponential.png` and `simulation/6-gas_graph`.
 - `uml`: A very simplified UML of how the program is meant to work. In German.
 
 ## External code used in this repo
