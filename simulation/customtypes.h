@@ -90,7 +90,7 @@ class info_module
     void print_small(uchar size, String text) const;
     void print_small(uchar size, char symbol) const;
     void print_number_tiny(uint number) const;
-    void render_graph() const;
+    void render_graph(bool invert_line) const;
   public:
     info_module();  // Standardkonstruktor; füllt Array temporär mit ungültigen Werten
     info_module(uchar initial_unit_type,

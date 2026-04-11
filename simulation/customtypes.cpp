@@ -125,7 +125,8 @@ void info_module::print_number_tiny(uint number) const
 #define pY displayed.pos_y
 #define sX displayed.size_x
 #define sY displayed.size_y
-void info_module::render_graph() const
+// NOTE: invert_line added for later simulation-exclusive bug fix
+void info_module::render_graph(bool invert_line) const
 {
   unsigned short highest_measured_value;
   unsigned short lowest_measured_value;
@@ -142,26 +143,38 @@ void info_module::render_graph() const
   lowest_measured_value  = *std::min_element(std::begin(list_reference),\
                                               std::end(list_reference)) * is_graph_not_relative_to_zero;
 
-  if(unit_type == UNIT_TEMPERATURE_GRAPH)
+  // NOTE: Major fix done here that was found during making of the simulation
+  // I honestly thought this was how the graph renderer was originally implemented,
+  // but I just now discovered it acutally (incorrectly) modifies highest/lowest.
+  // New version just changes the visual highest/lowest value without affecting
+  // the actual calculations.
+  display.setTextSize(1);
+  display.drawBitmap(22,5,graph_bitmap,102,58,INVERSE);
+  if(unit_type == UNIT_TEMPERATURE_GRAPH && unit != TEMPERATURE_CELSIUS)
   {
     switch(unit)
     {
       case TEMPERATURE_FAHRENHEIT:
-        highest_measured_value = highest_measured_value * 1.8 + 32;
-        lowest_measured_value = lowest_measured_value * 1.8 + 32 * is_graph_not_relative_to_zero;;
+        display.setCursor(4,4);
+        print_number_tiny(highest_measured_value * 1.8 + 32);
+        display.setCursor(4,52);
+        print_number_tiny(lowest_measured_value * 1.8 + 32 * is_graph_not_relative_to_zero);
         break;
       case TEMPERATURE_KELVIN:
-        highest_measured_value = highest_measured_value + 273;
-        lowest_measured_value = lowest_measured_value + 273;
+        display.setCursor(4,4);
+        print_number_tiny(highest_measured_value + 273);
+        display.setCursor(4,52);
+        print_number_tiny(lowest_measured_value + 273 * is_graph_not_relative_to_zero);
         break;
     }
   }
-  display.setTextSize(1);
-  display.drawBitmap(22,5,graph_bitmap,102,58,INVERSE);
-  display.setCursor(4,4);
-  print_number_tiny(highest_measured_value);
-  display.setCursor(4,52);
-  print_number_tiny(lowest_measured_value);
+  else
+  {
+    display.setCursor(4,4);
+    print_number_tiny(highest_measured_value);
+    display.setCursor(4,52);
+    print_number_tiny(lowest_measured_value);
+  }
   display.setCursor(4,28);
   switch(unit_type)
   {
@@ -215,8 +228,9 @@ void info_module::render_graph() const
     unsigned char adj_idx = i + measure_list_i_offset;
     unsigned short line_start_value = list_reference[(adj_idx + 1) % MEASURE_LIST_LENGTH];
     unsigned short line_end_value   = list_reference[adj_idx       % MEASURE_LIST_LENGTH];
+    // NOTE: minor bugfix: uses invert_line instead of BLACK to render properly
     display.drawLine(i+25,(-(line_start_value - lowest_measured_value) * 52)/ delta + 57,\
-                     i+24,(-(line_end_value   - lowest_measured_value) * 52)/ delta + 57, BLACK);
+                     i+24,(-(line_end_value   - lowest_measured_value) * 52)/ delta + 57, invert_line);
   }
 }
 
@@ -281,7 +295,7 @@ void info_module::render(bool invert_colors) const
   display.fillRoundRect((64*pX)+1, (32*pY)+1, (64<<sX)-2, (32<<sY)-2, 6, INVERSE);
   if(unit_type & UNIT_IS_GRAPH)
   {
-    render_graph();
+    render_graph(invert_colors);
   }
   else
   {
